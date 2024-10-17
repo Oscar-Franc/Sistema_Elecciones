@@ -1,0 +1,82 @@
+/* For information on how to create your own theme, please see:
+http://ionicframework.com/docs/theming/ */
+:root {
+	--ion-color-verde: #69bb7b;
+	--ion-color-verde-rgb: 105,187,123;
+	--ion-color-verde-contrast: #000000;
+	--ion-color-verde-contrast-rgb: 0,0,0;
+	--ion-color-verde-shade: #5ca56c;
+	--ion-color-verde-tint: #78c288;
+    --ion-color-oro: #f5c211;
+	--ion-color-oro-rgb: 245,194,17;
+	--ion-color-oro-contrast: #000000;
+	--ion-color-oro-contrast-rgb: 0,0,0;
+	--ion-color-oro-shade: #d8ab0f;
+	--ion-color-oro-tint: #f6c829;
+}
+
+
+
+.ion-color-verde2 {
+	--ion-color-base: var(--ion-color-verde);
+	--ion-color-base-rgb: var(--ion-color-verde-rgb);
+	--ion-color-contrast: var(--ion-color-verde-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-verde-contrast-rgb);
+	--ion-color-shade: var(--ion-color-verde-shade);
+	--ion-color-tint: var(--ion-color-verde-tint);
+}
+
+
+.ion-color-oro {
+	--ion-color-base: var(--ion-color-oro);
+	--ion-color-base-rgb: var(--ion-color-oro-rgb);
+	--ion-color-contrast: var(--ion-color-oro-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-oro-contrast-rgb);
+	--ion-color-shade: var(--ion-color-oro-shade);
+	--ion-color-tint: var(--ion-color-oro-tint);
+}
+.ion-color-verde1 {
+    /* border: 1px solid #000; Cambia el color del borde según tus necesidades */
+    border-radius: 8px; /* Bordes redondeados, si lo deseas */
+    background-color: rgb(20, 153, 20);
+    color: #000; /* Color del texto */
+    border: none;
+    text-decoration: none;
+    box-shadow: 0 2px 25px rgba(107, 197, 5, 0.63);
+}
+
+.ion-color-oro1 {
+    border-radius: 8px; /* Bordes redondeados, si lo deseas */
+    background-color: rgb(236, 217, 43);
+    color: #000; /* Color del texto */
+    border: none;
+    text-decoration: none;
+    box-shadow: 0 2px 25px rgb(231, 252, 47);
+}
+
+.ion-color-oroVerde{
+	background: linear-gradient(90deg, rgba(162,242,154,1) 4%, rgba(18,228,0,1) 32%, rgba(255,229,0,1) 55%, rgba(236,226,130,1) 99%);
+}
+
+.page-myimg {
+	background-image: url('../../../myApp/assets/img/Logo_de_la_UAEMex.svg'); /* Ruta de la imagen */
+	background-size: cover; /* Que la imagen cubra toda la página */
+	background-position: center; /* Centra la imagen */
+	width: '100px'; 
+	background-repeat: no-repeat; /* Evita que la imagen se repita */
+	margin-top: 0px;
+}
+
+.page-background {
+	background-image: url('../../../myApp/assets/img/fondo1.jpg'); /* Ruta de la imagen */
+	background-size: cover; /* Que la imagen cubra toda la página */
+	background-position: center; /* Centra la imagen */
+	height: 100vh; /* 100% de la altura de la ventana */
+	width: 100%; /* 100% del ancho */
+	background-repeat: no-repeat; /* Evita que la imagen se repita */
+	margin-top: 0px;
+}
+
+.page-sin-margen{
+	margin-top: 0px;
+}

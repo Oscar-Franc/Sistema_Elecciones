@@ -25,12 +25,25 @@ img:hover {
 }
 
 img {
-    width: 45%;  /* Ancho de la imagen */
-    height: 45%;  /* Alto de la imagen */
+    width: 35%;  /* Ancho de la imagen */
+    height: 35%;  /* Alto de la imagen */
     border-radius: 50%;  /* Convierte la imagen en un círculo */
     object-fit: cover;  /* Se asegura de que la imagen se ajuste bien al contenedor */
 }
-
+.img2{
+	width: 70px;  /* Ancho de la imagen */
+    height: 70px;  /* Alto de la imagen */
+    border-radius: 30%;  /* Convierte la imagen en un círculo */
+    object-fit: cover;  /* Se asegura de que la imagen se ajuste bien al contenedor */
+	margin: 20px 0px 10px 0px;
+}
+.img3{
+	width: 60px;  /* Ancho de la imagen */
+    height: 60px;  /* Alto de la imagen */
+    border-radius: 30%;  /* Convierte la imagen en un círculo */
+    object-fit: cover;  /* Se asegura de que la imagen se ajuste bien al contenedor */
+	margin: 5px 0px 10px 0px;
+}
 .ion-color-verde2 {
 	--ion-color-base: var(--ion-color-verde);
 	--ion-color-base-rgb: var(--ion-color-verde-rgb);
@@ -69,36 +82,86 @@ img {
 }
 
 .ion-color-oroVerde{
-	background-color: #002f10;
+	background-color: #a2822c;
 	/*background: linear-gradient(90deg, rgba(162,242,154,1) 4%, rgba(18,228,0,1) 32%, rgba(255,229,0,1) 55%, rgba(236,226,130,1) 99%);
 */
-	height: 70px;
+	height: 200px;
+	margin: 0px 0px 0px 0px;
+}
+.ion-color-oroVerde2{
+	background-color: #a2822c;
+	/*background: linear-gradient(90deg, rgba(162,242,154,1) 4%, rgba(18,228,0,1) 32%, rgba(255,229,0,1) 55%, rgba(236,226,130,1) 99%);
+*/
+	
+	margin: 0px 0px 0px 0px;
+}
+.ion-color-oroVerde3{
+	background-color: #a2822c;
+	/*background: linear-gradient(90deg, rgba(162,242,154,1) 4%, rgba(18,228,0,1) 32%, rgba(255,229,0,1) 55%, rgba(236,226,130,1) 99%);
+*/
+}
+.ion-color-oroVerde4{
+	background-color: #a2822c;
+	/*background: linear-gradient(90deg, rgba(162,242,154,1) 4%, rgba(18,228,0,1) 32%, rgba(255,229,0,1) 55%, rgba(236,226,130,1) 99%);
+*/
 	margin: 0px 0px 0px 0px;
 }
 
 
+.none-shadow{
+	box-shadow: none !important;
+}
 
 .div-estilo1{
 	
-	display: flex; 
-	text-align: center;
-	width:100%;
-	
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0px;
+  	
 }
-.page-myimg {
+.div-estilo2{
 	display: flex;
-	background-image: url('../../../myApp/assets/img/Logo_de_la_UAEMex.svg'); /* Ruta de la imagen */
-	background-size: cover; /* Que la imagen cubra toda la página */
-	background-position: center; /* Centra la imagen */
-	width: 65px; 
-	height: 65px;
-	background-repeat: no-repeat; /* Evita que la imagen se repita */
-	margin: 0px 0px 0px 4px ;
+	justify-content: center;
+	text-align: center;
+	padding: 0px;
+}
+.div-logo{
+	margin: 10px 0px 0px 0px;
+	padding: 0px;
+	width: 100px;
+	height: 100px;
+	
+	border-radius: 50px 30px 50px 20px !important;
+	background-color: #1b4f32;
+}
+.div-logo2{
+	margin: 10px 0px 0px 0px;
+	padding: 0px;
+	width: 100px;
+	height: 100px;
+	
+	border-radius: 50px 30px 50px 20px !important;
+	background-color: #1b4f32;
+}
+.div-logo3{
+	margin: 3px 0px 0px 0px;
+	padding: 0px;
+	width: 80px;
+	height: 70px;
+	
+	border-radius: 50px 30px 50px 20px !important;
+	background-color: #1b4f32;
+}
+.color-principal{
+	background-color: #a2822c;
 }
 .page-background {
-	background-image: url('../../../myApp/assets/img/fondo1.jpg'); /* Ruta de la imagen */
+	background-image: url('../../../myApp/assets/img/fondo.png'); /* Ruta de la imagen */
 	background-size: cover; /* Que la imagen cubra toda la página */
-	background-position: center; /* Centra la imagen */
+	
 	height: 100%; /* 100% de la altura de la ventana */
 	width: 100%; /* 100% del ancho */
 	background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -110,10 +173,12 @@ img {
     align-items: center;
 }
 .estilo-letras{
-	color: white;
+	color: rgb(6, 6, 6);
 	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 	font-size: 25px;
-	margin: 0px 0px 0px 80px;
+	margin: 0px 0px 10px 0px;
+	padding: 0px 10px 10px 0px;
+	width: 100%;
 	text-align: center;
 }
 .estilo-letras-login{
@@ -125,33 +190,90 @@ img {
 .sin-bordes{
 	margin: 0px 0px 0px 0px;
 	padding: 0px;
+	background-color: transparent;
 }
+.estilo-titulo{
+	text-align: center;
+	color: white;
+	font-size: 50px;
+	text-shadow: 4px 1px 0px rgba(0,0,0,0.49);
+}
+.caja-login{
+	background-color: white;
+	border-radius: 20px;
+	border:2px solid black;
+	box-shadow: none;
+	--border-style: none;
+}
+
 .contenedor-candidatos{
 	/* border: solid black; */
 	border-radius: 10px ;
 	width: 100%;
 	height:100%;
 	/* background-color: #FFD700; */
+	
 }
 .contenedor-candidato{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	
-	background-color: #eb9110;
+	position: relative;
+	padding: 5px 0px 3px 0px;
+  	text-align:justify;
+	background-color: transparent;
 	border-radius: 10px ;
 }
-
+.info-contenedor{
+	display: flex;
+	align-items: center;
+	gap: 1rem; /* Espacio entre la imagen y el texto */
+	justify-content: center;
+	margin-top: 1rem;
+  }
+.fondo-info{
+	background-color: #c1b64d;
+	height:auto;
+	border: 3px solid #1b4f32;
+	border-radius: 10px;
+	padding: 3px;
+}
+.sin-estilos{
+	padding: 0;
+	margin: 0;
+}
+.estilo-texto{
+	font-size: 25px;
+	display: flex;
+	justify-content: center;
+	color: rgb(0, 0, 0);
+	text-shadow: 3px 1px 0px rgba(255, 255, 255, 0.537);
+}
 .custom-content {
 	padding: 0;
   margin: 0;
   border: none;
-  background-color: transparent; /* Fondo transparente */
+  background-color: black; /* Fondo transparente */
   box-shadow: none; /* Sin */
+  --background: #a2822c; 
+  --padding-top: 0px;
 }
 .info-icon {
 	position: absolute;
-  	right: 22.5px;
-  	font-size: 24px;
-  	color: blue;
+  	right: 0px;
+	top: 0px;
+	
+	--background: none; 
+	--box-shadow:none;
+	margin: 0;
+	padding: 0;
+	--padding-top: 0px;
+	--padding-bottom:0px;
+	--padding-start: 0px;
+	--padding-end: 0px;
+}
+.estilo-icono{
+	font-size: 50px;
+	width: 50px;
+	height: 35px;
+	color: black;
+	background-color: gray;
+	border-radius: 10px;
 }

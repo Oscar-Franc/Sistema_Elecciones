@@ -2,6 +2,9 @@ import { IonButton, IonCard, IonCardContent, IonContent, IonFooter, IonHeader, I
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import '../theme/variables.css'
+import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
+
+
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -10,7 +13,7 @@ const Login: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault(); 
         try {
-            const response = await fetch('http://172.26.51.116:3000/login', {
+            const response = await fetch('http://192.168.1.8:3000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,14 +39,17 @@ const Login: React.FC = () => {
 
     return (
         <IonPage   >
-            <IonHeader >
+            <IonHeader class='none-shadow'>
                 <IonToolbar color={'oroVerde'} >
-                <div className='div-estilo1'>
-                    <div className="page-myimg">
-                        <IonTitle className="estilo-letras" >Sistema de Votacion</IonTitle>
+                <div className='div-estilo1 color-principal'>
+                    <div className='div-logo'>
+                    <img src={UaemexImage} className='img2' alt="logoUaemex" />
                     </div>
                     
+                    <IonTitle color={'oroVerde'} className="estilo-letras" >Universidad Autonoma <br></br> del Estado de Mexico</IonTitle>
                 </div>
+                
+            
                 </IonToolbar>
             </IonHeader >
             
@@ -51,13 +57,15 @@ const Login: React.FC = () => {
             
             
             <IonContent >
+            
             <div className='page-background '>
-               
+                <h1 className='sin-bordes estilo-titulo'>Urna
+                 Electronica Electoral</h1>
                     <IonCard  className="sin-bordes  ">
                         <IonCardContent >
                          <form onSubmit={handleLogin} >
-                            <IonInput fill='outline' labelPlacement='floating' value={email} type='email' placeholder='ejemplo@alumno.uaemex.mx' label='Correo Escolar' onIonChange={(e) => setEmail(e.detail.value!)} ></IonInput>
-                            <IonInput className='ion-margin-top' fill='outline' value={password} labelPlacement='floating' type='password' placeholder='1711890' onIonChange={(e) => setPassword(e.detail.value!)} label='Numero de Cuenta'></IonInput>
+                            <IonInput className='caja-login' fill='outline' labelPlacement='floating' value={email} type='email' placeholder='ejemplo@alumno.uaemex.mx' label='Correo Escolar' onIonChange={(e) => setEmail(e.detail.value!)} ></IonInput>
+                            <IonInput className='caja-login ion-margin-top' fill='outline' value={password} labelPlacement='floating' type='password' placeholder='1711890' onIonChange={(e) => setPassword(e.detail.value!)} label='Numero de Cuenta'></IonInput>
                             <IonButton fill="clear" color={'verde1'} className='ion-margin-top estilo-letras-login' expand='full' type='submit'>Login</IonButton>
                             {/* Colocar la imagen <IonButton routerLink='/register' fill="clear" color={'oro1'} className='ion-margin-top'  type='submit' expand='full'  >Create account</IonButton> */}
                         </form>

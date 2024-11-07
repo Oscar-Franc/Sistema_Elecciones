@@ -11,15 +11,18 @@ def generar_numero_cuenta():
 # Asignar ID de persona y otros valores de la tabla
 def generar_alumno_registro(id_persona):
     no_cuenta = generar_numero_cuenta()
-    id_organizacion_carrera = 1  # Para carrera 1
+    id_carrera = 9 # Identificador de carrera
     semestre = random.randint(1, 10)  # Asignar un semestre aleatorio entre 1 y 10
-    return f"INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `semestre`,`id_carrera`) VALUES ('{id_persona}', '{no_cuenta}',  '{semestre}','{id_organizacion_carrera}');"
+    return f"INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `semestre`, `id_carrera`) VALUES ('{id_persona}', '{no_cuenta}',  '{semestre}', '{id_carrera}');"
 
-# Generar las sentencias SQL para los primeros 687 IDs de la tabla `Alumno`
-sentencias_sql_alumno = [generar_alumno_registro(id_persona) for id_persona in range(1, 688)]
+# Generar las sentencias SQL para los IDs en el rango 689 a 1328
+sentencias_sql_alumno = [generar_alumno_registro(id_persona) for id_persona in range(2686, 2693)]
 
-# Guardar en archivo SQL
-with open("inserts_alumno_1_uaemex.sql", "w") as file:
+# Guardar en archivo SQL (ruta completa)
+output_file_path = "/home/oscar/Documentos/Semestre2024B/Sistema_Votacion/Codigos_DB/inserts_alumno_9_uaemex.sql"
+with open(output_file_path, "w") as file:
     file.write("\n".join(sentencias_sql_alumno))
 
-print("Archivo 'inserts_alumno_uaemex.sql' generado con las sentencias SQL.")
+print(f"Archivo '{output_file_path}' generado con las sentencias SQL.")
+
+

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estadísticas de Votación</title>
+<style>
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom right, #2E7D32, #B8860B);
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        padding: 20px;
+    }
+
+    .votes {
+        font-size: 24px;
+        color: #ffffff;
+    }
+
+    /* Título */
+    h1 {
+        text-align: center;
+        font-size: 36px;
+        color: #fff;
+        margin-top: px; 
+    }
+
+
+    .back-link {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 18px;
+        color: #fff;
+        text-decoration: none;
+        background-color: transparent;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .back-link:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+ 
+    .stat {
+        background-color: rgba(0, 0, 0, 0.5); 
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        font-size: 24px;
+        width: 350px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        margin: 15px;
+    }
+
+    .progress-container {
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .progress-bar {
+        height: 20px;
+        border-radius: 8px;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        line-height: 20px;
+        transition: width 1s;
+    }
+
+    .progress-votes {
+        background-color: #4CAF50;
+    }
+
+    .progress-percentage {
+        background-color: #FF6347; 
+    }
+</style>
+</head>
+<body>
+
+
+<a href="javascript:history.back()" class="back-link">Regresar</a>
+
+
+<h1>Estadísticas de Votación</h1>
+
+
+<div class="container">
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Candidato 1</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Candidato 2</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Candidato 3</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Votacion nula</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Votacion total</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Votacion valida</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Participacion universitaria</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Facultad de Ingenieria</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Teotihuacan</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Uribe</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Candidato no registrado</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Votos nulos</strong></center> <br> <h6>Porcentaje de votacion obtenida</h6>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar progress-votes" style="width: 54%;">54%</div>
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Votos Candidato 1</strong></center> 
+        </div>
+        <div class="votes">
+            <br>
+            <br>
+            <strong>540</strong> Votos Obtenidos
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Votos Candidato 2</strong></center> 
+        </div>
+        <div class="votes">
+            <br>
+            <br>
+            <strong>540</strong> Votos Obtenidos
+        </div>
+    </div>
+
+    <div class="stat">
+        
+        <div class="votes">
+           <center> <strong>Votos Candidato 3</strong></center> 
+        </div>
+        <div class="votes">
+            <br>
+            <br>
+            <strong>540</strong> Votos Obtenidos
+        </div>
+
+</div>
+
+</body>
+</html>

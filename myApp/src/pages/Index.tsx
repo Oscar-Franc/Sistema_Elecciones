@@ -2,20 +2,24 @@ import { IonModal, IonImg, IonIcon, IonButton, IonContent, IonHeader, IonPage, I
 import React, { useState } from 'react';
 import { alertCircleOutline } from 'ionicons/icons'; 
 import '../theme/variables.css'
-import candidataImage from '../../assets/img/candidata.jpg';
-import candidataImage2 from  '../../assets/img/candidata3.jpg'
-import candidatoImage from '../../assets/img/hombreCandidato.jpg'
+import candidataImage from '../../assets/img/candidata.jpeg';
+import candidataImage2 from  '../../assets/img/hombreCandidato.jpeg'
+import candidatoImage from '../../assets/img/candidata2.jpeg'
 import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
 
 
 
 const Index: React.FC = () => {
     
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault(); 
-    }
+    const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
+
+    const handleImageClick = (candidateName: string) => {
+        setSelectedCandidates(prevSelected => 
+            prevSelected.includes(candidateName) 
+                ? prevSelected.filter(name => name !== candidateName) // Deselecciona si ya está en la lista
+                : [...prevSelected, candidateName] // Agrega si no está en la lista
+        );
+    };
     return (
         <IonPage >
              <IonHeader class='none-shadow'>
@@ -38,53 +42,46 @@ const Index: React.FC = () => {
                 <div className='contenedor-candidatos'  >
                  <form >
                     
-                    <div className='contenedor-candidato '>
-                        
-                        <div className='info-contenedor'>
-                        <IonCheckbox/>
-                        <img src={candidataImage} alt="Candidata" />
-                        <div className='fondo-info'>
-                            <p className='sin-estilos '  >Nombre: Maria Luisa Hernandez Sanchez</p>
-                            <p className='sin-estilos '>Edad:  40 años</p>
-                            <p className='sin-estilos '>Tiempo en la universidad: 25 años</p>
-                            <p className='sin-estilos '>Grado Academico: Maestria</p>
+                 <div className='contenedor-candidato'>
+                            <div className='info-contenedor' onClick={() => handleImageClick('Maria Luisa Hernandez Sanchez')}>
+                                <img 
+                                    src={candidataImage} 
+                                    alt="Candidata" 
+                                    className={selectedCandidates.includes('Maria Luisa Hernandez Sanchez') ? 'selected' : ''}
+                                />
+                                {selectedCandidates.includes('Maria Luisa Hernandez Sanchez') && <span className='mark'>X</span>}
+                                <div className='fondo-info'>
+                                    <p className='sin-estilos'>Nombre: Maria Luisa Hernandez Sanchez</p>
+                                </div>
+                            </div>
                         </div>
-                        
+                        <div className='contenedor-candidato'>
+                            <div className='info-contenedor' onClick={() => handleImageClick('Samara Flores Alba')}>
+                                <img 
+                                    src={candidataImage2} 
+                                    alt="Candidata" 
+                                    className={selectedCandidates.includes('Samara Flores Alba') ? 'selected' : ''}
+                                />
+                                {selectedCandidates.includes('Samara Flores Alba') && <span className='mark'>X</span>}
+                                <div className='fondo-info'>
+                                    <p className='sin-estilos'>Nombre: Samara Flores Alba</p>
+                                </div>
+                            </div>
                         </div>
-                        
-                        
-                    </div>
 
-                    <div className='contenedor-candidato '>
-                        
-                        <div className='info-contenedor'>
-                        <IonCheckbox/>
-                        <img src={candidataImage2} alt="Candidata" />
-                        <div className='fondo-info'>
-                            <p className='sin-estilos '  >Nombre: Samara FLores Alba</p>
-                            <p className='sin-estilos '>Edad: 50 años</p>
-                            <p className='sin-estilos '>Tiempo en la universidad: 28 años</p>
-                            <p className='sin-estilos '>Grado Academico: Doctorado</p>
+                        <div className='contenedor-candidato'>
+                            <div className='info-contenedor' onClick={() => handleImageClick('Victor Hugo Lopez')}>
+                                <img 
+                                    src={candidatoImage} 
+                                    alt="Candidato" 
+                                    className={selectedCandidates.includes('Victor Hugo Lopez') ? 'selected' : ''}
+                                />
+                                {selectedCandidates.includes('Victor Hugo Lopez') && <span className='mark'>X</span>}
+                                <div className='fondo-info'>
+                                    <p className='sin-estilos'>Nombre: Victor Hugo Lopez</p>
+                                </div>
+                            </div>
                         </div>
-                        
-                        </div>
-                        
-                    </div>
-
-                    <div className='contenedor-candidato  '>
-                        <div className='info-contenedor'> 
-                        <IonCheckbox/>
-                        <img src={candidatoImage} alt="Candidata" />
-                        <div className='fondo-info'>
-                            <p className='sin-estilos '  >Nombre: Victor Hugo Lopez</p>
-                            <p className='sin-estilos '>Edad: 55 años</p>
-                            <p className='sin-estilos '>Tiempo en la universidad: 30 años</p>
-                            <p className='sin-estilos '>Grado Academico: Doctorado</p>
-                        </div>
-                        
-                        </div>
-                        
-                    </div>
                     <br />
                     <IonLabel position="floating">Escribe el nombre de algun otro candidato</IonLabel>
                     <br />
@@ -92,9 +89,7 @@ const Index: React.FC = () => {
                      <div>
                      <IonButton fill="clear" color={'verde1'} className=' estilo-letras-login' expand='full' type='submit'>Votar</IonButton>
                      </div>
-                    <div>
-                    <IonButton fill="clear" color={'verde1'} className='ion-margin-top estilo-letras-login' expand='full' type='submit'>Anular Voto</IonButton>
-                    </div>
+                    
                  </form>
                 </div>
                 

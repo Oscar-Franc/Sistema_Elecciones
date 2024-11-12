@@ -6,22 +6,21 @@ import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
 
 
 const Login: React.FC = () => {
-    const [email, setEmail] = useState('');
+    
     const [password, setPassword] = useState('');
     const history = useHistory();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault(); 
         try {
-            const response = await fetch('http://172.26.53.195:3000/login', {
+            const response = await fetch('http://172.26.51.236:3000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({password}),
             });
             if (!response.ok) {
-                // Manejar errores de red o del servidor
                 throw new Error('Error al iniciar sesión');
             }
             const data = await response.json();
@@ -64,8 +63,8 @@ const Login: React.FC = () => {
                     <IonCard  className="sin-bordes  ">
                         <IonCardContent >
                          <form onSubmit={handleLogin} >
-                            <IonInput className='caja-login' fill='outline' labelPlacement='floating' value={email} type='email' placeholder='ejemplo@alumno.uaemex.mx' label='Correo Escolar' onIonChange={(e) => setEmail(e.detail.value!)} ></IonInput>
-                            <IonInput className='caja-login ion-margin-top' fill='outline' value={password} labelPlacement='floating' type='password' placeholder='1711890' onIonChange={(e) => setPassword(e.detail.value!)} label='Numero de Cuenta'></IonInput>
+                            
+                            <IonInput className='caja-login ion-margin-top' fill='outline' value={password} labelPlacement='floating' type='text' placeholder='1711890' onIonChange={(e) => setPassword(e.detail.value!)} label='Numero de Cuenta'></IonInput>
                             <IonButton fill="clear" color={'verde1'} className='ion-margin-top estilo-letras-login' expand='full' type='submit'>Login</IonButton>
                             
                             

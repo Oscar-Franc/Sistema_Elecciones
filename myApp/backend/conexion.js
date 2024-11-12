@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '091294',
-  database: 'mydatabase'
+  database: 'urnaelectoral'
 });
 
 db.connect((err) => {
@@ -23,11 +23,11 @@ db.connect((err) => {
 });
 
 // Endpoint para iniciar sesión
-app.post('/login', (req, res) => {
+app.post('/login', async(req, res) => {
   const { email, password } = req.body;
-  const query = 'SELECT * FROM users WHERE email = ? AND password = ?';
+  const query = 'SELECT Persona.nombre  FROM Persona JOIN Alumno ON Alumno.id_persona = Persona.id_persona WHERE  Alumno.no_cuenta = ?';
 
-  db.query(query, [email, password], (err, result) => {
+  db.query(query, [password], (err, result) => {
     if (err) {
       return res.status(500).send('Error en la consulta');
     }
@@ -39,7 +39,6 @@ app.post('/login', (req, res) => {
     }
   });
 });
-
 // Iniciar el servidor
 app.listen(3000, () => {
   console.log('Servidor corriendo en el puerto 3000');

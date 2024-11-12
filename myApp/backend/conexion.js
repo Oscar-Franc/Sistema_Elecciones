@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Configurar conexión a MySQL
 const db = mysql.createConnection({
-  host: 'localhost',
+  host: '127.0.0.1',
   user: 'root',
   password: '091294',
   database: 'urnaelectoral'
@@ -40,6 +40,6 @@ app.post('/login', async(req, res) => {
   });
 });
 // Iniciar el servidor
-app.listen(3000, () => {
-  console.log('Servidor corriendo en el puerto 3000');
+app.listen(8100, () => {
+  console.log('Servidor corriendo en el puerto 8080');
 });

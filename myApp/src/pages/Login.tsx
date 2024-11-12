@@ -13,7 +13,11 @@ const Login: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault(); 
         try {
+<<<<<<< HEAD
             const response = await fetch('http://172.26.51.236:3000/login', {
+=======
+            const response = await fetch('http://localhost:8100/login', {
+>>>>>>> 45e4461 (2)
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

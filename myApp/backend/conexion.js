@@ -63,7 +63,46 @@ app.get('/alumnoInfo', (req, res) => {
     }
   });
 });
+app.get('/candidatos', (req, res) => {
+  const query = 'SELECT id_plantilla, candidato FROM plantilla';
+  db.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).send('Error al obtener los candidatos');
+      }
+      res.json({ success: true, candidatos: results });
+  });
+});
+app.post('/registrarVoto', (req, res) => {
+  const { no_cuenta, id_candidato, tipo_voto } = req.body;
 
+  // Para pruebas, todos los votos se registrarán en la columna voto_alumno
+  const votoCampo = 'voto_alumno'; // Configura siempre a voto_alumno
+
+  let query;
+  let parametros;
+
+  if (tipo_voto === 'candidato') {
+      // Incrementar el voto en el candidato específico
+      query = `UPDATE plantilla SET ${votoCampo} = ${votoCampo} + 1 WHERE id_plantilla = ?`;
+      parametros = [id_candidato];
+  } else if (tipo_voto === 'nulo') {
+      // Incrementar el voto en la plantilla de "Nulo"
+      query = `UPDATE plantilla SET ${votoCampo} = ${votoCampo} + 1 WHERE candidato = 'Nulo'`;
+      parametros = [];
+  } else if (tipo_voto === 'otro') {
+      // Incrementar el voto en la plantilla de "Otro"
+      query = `UPDATE plantilla SET ${votoCampo} = ${votoCampo} + 1 WHERE candidato = 'Otro'`;
+      parametros = [];
+  }
+
+  // Ejecutar la consulta
+  db.query(query, parametros, (err, result) => {
+      if (err) {
+          return res.status(500).json({ success: false, message: 'Error al registrar el voto' });
+      }
+      res.json({ success: true, message: 'Voto registrado correctamente' });
+  });
+});
 // Iniciar el servidor
 app.listen(3000, () => {
   console.log('Servidor corriendo en el puerto 3000');

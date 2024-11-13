@@ -7,15 +7,7 @@ import candidatoImage from '../../assets/img/candidata2.jpeg'
 import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
 const Register: React.FC = () => {
     
-    const history = useHistory();
-    const [selectedSpace, setSelectedSpace] = useState<string>();
-
-    const handleNavigation = () => {
-        history.push({
-            pathname: '/login',
-            state: { espacioAcademico: selectedSpace },
-        });
-    };
+  
     return (
         <IonPage>
             <IonHeader class='none-shadow'>
@@ -80,17 +72,13 @@ const Register: React.FC = () => {
                     </div>
                  </form>
             <IonLabel>Selecciona un espacio académico</IonLabel>
-          <IonSelect
-            placeholder="Seleccione una opción"
-            value={selectedSpace}
-            onIonChange={(e) => setSelectedSpace(e.detail.value)}
-          >
+          <IonSelect>
             <IonSelectOption value="espacio1">Espacio Académico 1</IonSelectOption>
             <IonSelectOption value="espacio2">Espacio Académico 2</IonSelectOption>
             <IonSelectOption value="espacio3">Espacio Académico 3</IonSelectOption>
           </IonSelect>
                 
-                        <IonButton fill="clear" color={'verde1'} className='ion-margin-top estilo-letras-login' expand='full' type='submit'  onClick={handleNavigation}>
+                        <IonButton routerLink='/login' fill="clear" color={'verde1'} className='ion-margin-top estilo-letras-login' expand='full' type='submit' >
                 Siguiente
             </IonButton>
                 

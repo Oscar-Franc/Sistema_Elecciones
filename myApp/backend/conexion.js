@@ -10,8 +10,8 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: '091294',
-  database: 'urnaelectoral'
+  password: '',
+  database: 'Urna'
 });
 
 db.connect((err) => {
@@ -24,8 +24,17 @@ db.connect((err) => {
 
 // Endpoint para iniciar sesión
 app.post('/login', async(req, res) => {
-  const { email, password } = req.body;
-  const query = 'SELECT persona.nombre  FROM persona JOIN alumno ON alumno.id_persona = persona.id_persona WHERE  alumno.no_cuenta = ?';
+  const {password } = req.body;
+  const query = `
+  SELECT Persona.nombre, Persona.id_persona, COALESCE(Alumno.no_cuenta, Profesor.no_cuenta, Administrativo.no_cuenta) AS no_cuenta 
+  FROM Persona 
+  LEFT JOIN Alumno ON Alumno.id_persona = Persona.id_persona 
+  LEFT JOIN Profesor ON Profesor.id_persona = Persona.id_persona 
+  LEFT JOIN Administrativo ON Administrativo.id_persona = Persona.id_persona 
+  WHERE COALESCE(Alumno.voto_realizado, Profesor.voto_realizado, Administrativo.voto_realizado) = 0 
+    AND COALESCE(Alumno.no_cuenta, Profesor.no_cuenta, Administrativo.no_cuenta) = ? 
+  LIMIT 1;
+`;
 
   db.query(query, [password], (err, result) => {
     if (err) {
@@ -44,12 +53,19 @@ app.get('/alumnoInfo', (req, res) => {
   const noCuenta = req.query.no_cuenta;  // Obtenemos el no_cuenta de los parámetros de la URL
   
   const query = `
-    SELECT persona.nombre AS persona_nombre, carrera.nombre AS carrera_nombre, organizacion.nombre AS organizacion_nombre
-    FROM alumno
-    JOIN persona ON persona.id_persona = alumno.id_alumno
-    JOIN carrera ON carrera.id_carrera = alumno.id_carrera
-    JOIN organizacion ON carrera.id_Organizacion = organizacion.id_organizacion
-    WHERE alumno.no_cuenta = ?`;
+    SELECT 
+      Persona.nombre AS persona_nombre, 
+      COALESCE(Carrera.nombre, NULL) AS carrera_nombre,
+      COALESCE(Organizacion.nombre, NULL) AS organizacion_nombre
+    FROM Persona
+    LEFT JOIN Alumno ON Alumno.id_persona = Persona.id_persona
+    LEFT JOIN Carrera ON Carrera.id_carrera = Alumno.id_carrera
+    LEFT JOIN Profesor ON Profesor.id_persona = Persona.id_persona
+    LEFT JOIN Administrativo ON Administrativo.id_persona = Persona.id_persona
+    LEFT JOIN Organizacion ON 
+      (Carrera.id_Organizacion = Organizacion.id_organizacion OR Profesor.id_organizacion = Organizacion.id_organizacion OR Administrativo.id_organizacion = Organizacion.id_organizacion)
+    WHERE COALESCE(Alumno.no_cuenta, Profesor.no_cuenta, Administrativo.no_cuenta) = ? 
+    LIMIT 1`;
 
   db.query(query, [noCuenta], (err, result) => {
     if (err) {
@@ -63,8 +79,9 @@ app.get('/alumnoInfo', (req, res) => {
     }
   });
 });
+
 app.get('/candidatos', (req, res) => {
-  const query = 'SELECT id_plantilla, candidato FROM plantilla';
+  const query = 'SELECT id_plantilla, candidato FROM Plantilla';
   db.query(query, (err, results) => {
       if (err) {
           return res.status(500).send('Error al obtener los candidatos');
@@ -72,37 +89,85 @@ app.get('/candidatos', (req, res) => {
       res.json({ success: true, candidatos: results });
   });
 });
+
 app.post('/registrarVoto', (req, res) => {
-  const { no_cuenta, id_candidato, tipo_voto } = req.body;
+    const { idPersona, id_candidato, tipo_voto } = req.body;
+    
+    let votoCampo;
+    let selectQuery;
+    let updateQuery;
+    let parametros = [];
+    const id_persona = parseInt(req.body.id_persona, 10);
 
-  // Para pruebas, todos los votos se registrarán en la columna voto_alumno
-  const votoCampo = 'voto_alumno'; // Configura siempre a voto_alumno
 
-  let query;
-  let parametros;
+    // Determinar el campo de votos y actualizar `voto_realizado` en la tabla correspondiente
+    if (id_persona >= 1 && id_persona <= 5000) {
+        votoCampo = 'votoAlum';
+        query = `UPDATE Alumno SET Alumno.voto_realizado = 1 WHERE Alumno.id_persona = ?`;
+        db.query(query, [id_persona], (err, result) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: 'Error al registrar el voto del alumno' });
+            }
+        });
+    } else if (id_persona >= 5001 && id_persona <= 7000) {
+        votoCampo = 'votoProf';
+        query = `UPDATE Profesor SET Profesor.voto_realizado = 1 WHERE Profesor.id_persona = ?`;
+        db.query(query, [id_persona], (err, result) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: 'Error al registrar el voto del profesor' });
+            }
+        });
+    } else if (id_persona >= 7001 && id_persona <= 8000) {
+        votoCampo = 'votosAdm';
+        query = `UPDATE Administrativo SET Administrativo.voto_realizado = 1 WHERE Administrativo.id_persona = ?`;
+        db.query(query, [id_persona], (err, result) => {
+            if (err) {
+                return res.status(500).json({ success: false, message: 'Error al registrar el voto del administrativo' });
+            }
+        });
+    } else {
+        return res.status(400).json({ success: false, message: 'ID de persona fuera de rango' });
+    }
 
-  if (tipo_voto === 'candidato') {
-      // Incrementar el voto en el candidato específico
-      query = `UPDATE plantilla SET ${votoCampo} = ${votoCampo} + 1 WHERE id_plantilla = ?`;
-      parametros = [id_candidato];
-  } else if (tipo_voto === 'nulo') {
-      // Incrementar el voto en la plantilla de "Nulo"
-      query = `UPDATE plantilla SET ${votoCampo} = ${votoCampo} + 1 WHERE candidato = 'Nulo'`;
-      parametros = [];
-  } else if (tipo_voto === 'otro') {
-      // Incrementar el voto en la plantilla de "Otro"
-      query = `UPDATE plantilla SET ${votoCampo} = ${votoCampo} + 1 WHERE candidato = 'Otro'`;
-      parametros = [];
-  }
+    // Determinar la consulta para el tipo de voto y el candidato
+    if (tipo_voto === 'candidato') {
+        selectQuery = `SELECT ${votoCampo} FROM Plantilla WHERE id_plantilla = ?`;
+        updateQuery = `UPDATE Plantilla SET ${votoCampo} = ? WHERE id_plantilla = ?`;
+        parametros = [id_candidato];
+    } else if (tipo_voto === 'nulo') {
+        selectQuery = `SELECT ${votoCampo} FROM Plantilla WHERE candidato = 'Nulo'`;
+        updateQuery = `UPDATE Plantilla SET ${votoCampo} = ? WHERE candidato = 'Nulo'`;
+    } else if (tipo_voto === 'otro') {
+        selectQuery = `SELECT ${votoCampo} FROM Plantilla WHERE candidato = 'Otro'`;
+        updateQuery = `UPDATE Plantilla SET ${votoCampo} = ? WHERE candidato = 'Otro'`;
+    } else {
+        return res.status(400).json({ success: false, message: 'Tipo de voto no válido' });
+    }
 
-  // Ejecutar la consulta
-  db.query(query, parametros, (err, result) => {
-      if (err) {
-          return res.status(500).json({ success: false, message: 'Error al registrar el voto' });
-      }
-      res.json({ success: true, message: 'Voto registrado correctamente' });
-  });
+    // Ejecutar la consulta de actualización en `plantilla`
+    // Ejecutar la consulta para obtener el valor actual y luego actualizarlo
+    db.query(selectQuery, parametros, (err, results) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error al obtener el conteo de votos' });
+        }
+
+        if (results.length > 0) {
+            const currentVotoCount = results[0][votoCampo] || 0;
+            const newVotoCount = currentVotoCount + 1;
+
+            // Ejecutar la actualización con el nuevo valor de votos
+            db.query(updateQuery, [newVotoCount, ...parametros], (err, result) => {
+                if (err) {
+                    return res.status(500).json({ success: false, message: 'Error al actualizar el conteo de votos' });
+                }
+                res.json({ success: true, message: 'Voto registrado correctamente' });
+            });
+        } else {
+            res.status(404).json({ success: false, message: 'Candidato no encontrado para actualizar voto' });
+        }
+    });
 });
+
 // Iniciar el servidor
 app.listen(8100, () => {
   console.log('Servidor corriendo en el puerto 8080');

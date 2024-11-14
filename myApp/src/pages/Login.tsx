@@ -6,38 +6,40 @@ import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
 
 
 const Login: React.FC = () => {
-    
     const [password, setPassword] = useState('');
     const history = useHistory();
 
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault(); 
+        e.preventDefault();
         try {
-            const response = await fetch('http://192.168.237.126:3000/login', {
+            const response = await fetch('http://192.168.1.98:8100/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({password}),
+                body: JSON.stringify({ password }),
             });
             if (!response.ok) {
                 throw new Error('Error al iniciar sesión');
             }
             const data = await response.json();
 
-        if (data.success) {
-            // Guardar el número de cuenta en localStorage
-            localStorage.setItem('no_cuenta', password);
-            
-            console.log('Login exitoso');
-            history.push('/index');
-        } else {
-            console.log('Credenciales incorrectas');
+            if (data.success) {
+                // Guardar nombre, id_persona y no_cuenta en localStorage
+                localStorage.setItem('nombre', data.user.nombre);
+                localStorage.setItem('id_persona', data.user.id_persona);
+                localStorage.setItem('no_cuenta', data.user.no_cuenta);
+
+                console.log('Login exitoso');
+                history.push('/index'); // Redirigir a otra pantalla
+            } else {
+                console.log('Credenciales incorrectas');
+            }
+        } catch (error) {
+            console.error('Error en el login:', error);
         }
-    } catch (error) {
-        console.error('Error en el login:', error);
-    }
-};
+    };
+
     return (
         <IonPage   >
             <IonHeader class='none-shadow'>

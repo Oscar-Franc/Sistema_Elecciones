@@ -13,11 +13,9 @@ const Login: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault(); 
         try {
-<<<<<<< HEAD
-            const response = await fetch('http://172.26.51.236:3000/login', {
-=======
-            const response = await fetch('http://localhost:8100/login', {
->>>>>>> 45e4461 (2)
+
+            const response = await fetch('http://192.168.237.126:3000/login', {
+
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,17 +27,19 @@ const Login: React.FC = () => {
             }
             const data = await response.json();
 
-            if (data.success) {
-                console.log('Login exitoso');
-                history.push('/index');
-            } else {
-                console.log('Credenciales incorrectas');
-            }
-        } catch (error) {
-            console.error('Error en el login:', error);
+        if (data.success) {
+            // Guardar el número de cuenta en localStorage
+            localStorage.setItem('no_cuenta', password);
+            
+            console.log('Login exitoso');
+            history.push('/index');
+        } else {
+            console.log('Credenciales incorrectas');
         }
-    };
-
+    } catch (error) {
+        console.error('Error en el login:', error);
+    }
+};
     return (
         <IonPage   >
             <IonHeader class='none-shadow'>

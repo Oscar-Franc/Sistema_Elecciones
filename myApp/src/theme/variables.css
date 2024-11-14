@@ -244,11 +244,11 @@ img {
 	margin: 0;
 }
 .estilo-texto{
-	font-size: 25px;
+	font-size: 20px;
 	display: flex;
 	justify-content: center;
 	color: rgb(0, 0, 0);
-	text-shadow: 3px 1px 0px rgba(255, 255, 255, 0.537);
+	
 }
 .custom-content {
 	padding: 0;

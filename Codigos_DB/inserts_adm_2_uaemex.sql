@@ -1,0 +1,17 @@
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7082', '5002349', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7083', '5002444', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7084', '6002912', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7085', '6002128', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7086', '2202481', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7087', '9891234', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7088', '5002355', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7089', '4891974', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7090', '5891713', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7091', '2991517', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7092', '2891959', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7093', '6002960', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7094', '0791313', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7095', '2991205', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7096', '2991500', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7097', '6002439', '2');
+INSERT INTO Administrativo (id_persona, no_cuenta, id_organizacion)VALUES ('7098', '1891018', '2');

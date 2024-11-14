@@ -1,19 +1,22 @@
 import random
 
 def generar_nombre():
-    nombres = [
-        "Juan", "María", "Pedro", "Ana", "Luis", "Carlos", "Sofía", "David", "Laura", "Jorge", "Mónica", "Elena",
-        "Miguel", "Andrés", "Diana", "Alejandro", "Patricia", "Fernando", "Rosa", "Gabriel", "Paola", "Rodrigo",
-        "Verónica", "César", "Sara", "Raúl", "Margarita", "Martín", "Elsa", "Santiago", "Daniel", "Camila", "Emilio",
-        "Beatriz", "Ricardo", "Irene", "Tomás", "Julia", "Clara", "Renato", "Silvia", "Jaime", "Manuel", "Lucía",
-        "Vicente", "Natalia", "Arturo", "Olga", "Ramón", "Francisco", "Teresa", "Marcos", "Cristina", "Mario", "Inés",
-        "Rafael", "Virginia", "Edgar", "Lidia", "Adriana", "Jesús", "Lorena", "Roberto", "Marta", "Ángel", "Sandra",
-        "Fabiola", "Leonardo", "Susana", "Edith", "Víctor", "Marcela", "Ángela", "Héctor", "Cintia", "Omar", "Brenda",
-        "Esteban", "Gisela", "Mariana", "Rubén", "Gloria", "Isabel", "Samuel", "Antonia", "Lucas", "Bárbara", "Félix",
-        "Nadia", "Oscar", "Rocío", "Adolfo", "Eva", "Hilda", "Anselmo", "Amalia", "Elisa", "Celeste", "Norberto", 
-        "Mireya", "Emilia", "Eduardo", "Ignacio", "Pilar", "Román", "Olivo", "Consuelo", "Ágata"
+    nombres_masculinos = [
+        "Juan", "Pedro", "Luis", "Carlos", "David", "Jorge", "Miguel", "Andrés", "Alejandro", "Fernando", "Gabriel", 
+        "Rodrigo", "César", "Raúl", "Martín", "Santiago", "Daniel", "Emilio", "Ricardo", "Tomás", "Renato", "Jaime", 
+        "Manuel", "Vicente", "Arturo", "Ramón", "Francisco", "Marcos", "Mario", "Rafael", "Edgar", "Jesús", "Roberto", 
+        "Ángel", "Leonardo", "Víctor", "Héctor", "Omar", "Esteban", "Rubén", "Samuel", "Lucas", "Félix", "Oscar", 
+        "Adolfo", "Anselmo", "Norberto", "Eduardo", "Ignacio", "Román", "Olivo"
     ]
-
+    
+    nombres_femeninos = [
+        "María", "Ana", "Sofía", "Laura", "Mónica", "Elena", "Diana", "Patricia", "Rosa", "Paola", "Verónica", "Sara", 
+        "Margarita", "Elsa", "Camila", "Beatriz", "Irene", "Julia", "Clara", "Silvia", "Lucía", "Natalia", "Olga", 
+        "Teresa", "Cristina", "Inés", "Virginia", "Lidia", "Adriana", "Lorena", "Marta", "Sandra", "Fabiola", "Susana", 
+        "Edith", "Marcela", "Ángela", "Cintia", "Brenda", "Gisela", "Mariana", "Gloria", "Isabel", "Antonia", "Bárbara", 
+        "Nadia", "Rocío", "Eva", "Hilda", "Amalia", "Elisa", "Celeste", "Mireya", "Emilia", "Pilar", "Consuelo", "Ágata"
+    ]
+    
     apellidos_paternos = [
         "García", "López", "Martínez", "Hernández", "González", "Pérez", "Sánchez", "Ramírez", "Torres", "Flores",
         "Castillo", "Cruz", "Rojas", "Mendoza", "Reyes", "Ortega", "Vargas", "Silva", "Morales", "Rivera", "Romero",
@@ -40,10 +43,12 @@ def generar_nombre():
         "Márquez", "Estrada", "Yáñez", "Ruelas", "Benítez", "Villa", "Zapata"
     ]
     
+    nombres = nombres_masculinos + nombres_femeninos
     nombre = random.choice(nombres)
     apellido_paterno = random.choice(apellidos_paternos)
     apellido_materno = random.choice(apellidos_maternos)
-    return f"{nombre} {apellido_paterno} {apellido_materno}", nombre, apellido_paterno
+    sexo = "H" if nombre in nombres_masculinos else "M"
+    return f"{nombre} {apellido_paterno} {apellido_materno}", nombre, apellido_paterno, sexo
 
 def generar_email(nombre, apellido_paterno, dominio):
     inicial_nombre = nombre[0].lower()
@@ -53,25 +58,35 @@ def generar_email(nombre, apellido_paterno, dominio):
 def generar_telefono():
     return f"{random.randint(100, 999)}-{random.randint(100, 999)}-{random.randint(1000, 9999)}"
 
+def generar_edad(dominio):
+    if dominio == "alumno.uaemex.mx":
+        return random.randint(18, 35)
+    elif dominio == "profesor.uaemex.mx" or dominio == "administrativo.uaemex.mx":
+        return random.randint(25, 60)
+
 # Configuración de cantidades
 dominios = [
-    ("alumno.uaemex.mx", 5000),
-    ("profesor.uaemex.mx", 2000),
-    ("administrativo.uaemex.mx", 1000)
+    ("alumno.uaemex.mx", 3000),
+    ("profesor.uaemex.mx", 0),
+    ("administrativo.uaemex.mx", 0)
 ]
 
 # Generar las sentencias SQL
 sentencias_sql = []
 for dominio, cantidad in dominios:
     for _ in range(cantidad):
-        nombre_completo, nombre, apellido_paterno = generar_nombre()
+        nombre_completo, nombre, apellido_paterno, sexo = generar_nombre()
         email = generar_email(nombre, apellido_paterno, dominio)
         telefono = generar_telefono()
-        sentencia = f"INSERT INTO `Persona`(`nombre`, `email`, `tel`) VALUES ('{nombre_completo}', '{email}', '{telefono}');"
+        edad = generar_edad(dominio)
+        sentencia = (
+            f"INSERT INTO `Persona`(`nombre`, `email`, `tel`, `sexo`, `edad`) "
+            f"VALUES ('{nombre_completo}', '{email}', '{telefono}', '{sexo}', {edad});"
+        )
         sentencias_sql.append(sentencia)
 
 # Guardar en archivo SQL
-with open("inserts_persona_uaemex.sql", "w") as file:
+with open("inserts_persona_uaemex_4.sql", "w") as file:
     file.write("\n".join(sentencias_sql))
 
 print("Archivo 'inserts_persona_uaemex.sql' generado con las sentencias SQL.")

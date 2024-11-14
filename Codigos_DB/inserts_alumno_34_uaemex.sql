@@ -1,0 +1,15 @@
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13259', '4202105', '34', '2');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13260', '1202532', '34', '6');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13261', '3202165', '34', '4');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13262', '3202700', '34', '10');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13263', '4202087', '34', '3');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13264', '3202235', '34', '2');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13265', '9102910', '34', '5');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13266', '4202394', '34', '3');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13267', '9102202', '34', '4');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13268', '2202532', '34', '7');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13269', '2202852', '34', '6');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13270', '1202915', '34', '1');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13271', '0202908', '34', '5');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13272', '0202990', '34', '7');
+INSERT INTO `Alumno`(`id_persona`, `no_cuenta`, `id_carrera`, `semestre`) VALUES ('13273', '4202798', '34', '8');

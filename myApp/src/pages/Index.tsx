@@ -6,8 +6,9 @@ import candidataImage from '../../assets/img/candidata.jpeg';
 import candidataImage2 from '../../assets/img/hombreCandidato.jpeg';
 import candidatoImage from '../../assets/img/candidata2.jpeg';
 import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
+import { useHistory } from 'react-router-dom'; // Importar useHistory
 
-const URL = '192.168.1.98';
+const URL = '192.168.122.1';
 
 const Index: React.FC = () => {
     const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
@@ -16,12 +17,7 @@ const Index: React.FC = () => {
     const [otroCandidato, setOtroCandidato] = useState(''); // Para el nombre de otro candidato
     const noCuenta = localStorage.getItem('no_cuenta'); // Obtiene el número de cuenta
     const idPersona = Number(localStorage.getItem('id_persona')); // Convertir id_persona a número
-
-    useEffect(() => {
-        if (!idPersona) {
-            console.warn("ID de persona no encontrado en localStorage");
-        }
-    }, [idPersona]);
+    const history = useHistory(); // Hook para redirigir al usuario
 
     // Fetch para obtener los datos del alumno
     useEffect(() => {
@@ -85,74 +81,75 @@ const Index: React.FC = () => {
     };
 
     // Enviar voto
-   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!idPersona) {
-        alert('ID de persona no encontrado. Por favor, vuelve a iniciar sesión.');
-        return;
-    }
-
-    const tipo_usuario = determinarTipoUsuario(idPersona);
-    if (!tipo_usuario) {
-        alert('ID de persona fuera de rango para registrar el voto');
-        return;
-    }
-
-    let tipo_voto;
-    let id_candidato = null;
-
-    // Determinar el tipo de voto según las condiciones
-    if (selectedCandidates.length === 1 && !otroCandidato) {
-        // Caso 1: Voto válido para un solo candidato
-        tipo_voto = 'candidato';
-        id_candidato = candidatos.find(c => c.candidato === selectedCandidates[0])?.id_plantilla;
-        if (!id_candidato) {
-            alert('No se pudo encontrar el candidato seleccionado');
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!idPersona) {
+            alert('ID de persona no encontrado. Por favor, vuelve a iniciar sesión.');
             return;
         }
-    } else if (selectedCandidates.length === 3 && otroCandidato) {
-        // Caso 2: Todos los candidatos seleccionados y "otro" especificado -> Voto en "Otro"
-        tipo_voto = 'otro';
-        id_candidato = 4; // asignado a plantilla "Otro"
-    } else if (selectedCandidates.length === 0 && otroCandidato) {
-        // Caso 3: No se selecciona ningún candidato, pero se proporciona "otro" -> Voto en "Otro"
-        tipo_voto = 'otro';
-        id_candidato = 4; // asignado a plantilla "Otro"
-    } else {
-        // Caso 4: Voto nulo en cualquier otra condición
-        tipo_voto = 'nulo';
-        id_candidato = 5; // asignado a plantilla "Nulo"
-    }
 
-    console.log("Datos enviados:", {
+        const tipo_usuario = determinarTipoUsuario(idPersona);
+        if (!tipo_usuario) {
+            alert('ID de persona fuera de rango para registrar el voto');
+            return;
+        }
+
+        let tipo_voto;
+        let id_candidato = null;
+
+        // Determinar el tipo de voto según las condiciones
+        if (selectedCandidates.length === 1 && !otroCandidato) {
+            tipo_voto = 'candidato';
+            id_candidato = candidatos.find(c => c.candidato === selectedCandidates[0])?.id_plantilla;
+            if (!id_candidato) {
+                alert('No se pudo encontrar el candidato seleccionado');
+                return;
+            }
+        } else if (selectedCandidates.length === 3 && otroCandidato) {
+            tipo_voto = 'otro';
+            id_candidato = 4; // asignado a plantilla "Otro"
+        } else if (selectedCandidates.length === 0 && otroCandidato) {
+            tipo_voto = 'otro';
+            id_candidato = 4; // asignado a plantilla "Otro"
+        } else {
+            tipo_voto = 'nulo';
+            id_candidato = 5; // asignado a plantilla "Nulo"
+        }
+
+        // Enviar la información al backend
+        try {
+            const response = await fetch(`http://${URL}:8100/registrarVoto`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_persona: idPersona, tipo_usuario, id_candidato, tipo_voto }),
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert('Voto registrado correctamente');
+                history.push('/'); // Redirigir a la página principal después del voto
+            } else {
+                alert('Error al registrar el voto');
+            }
+        } catch (error) {
+            alert('Ocurrió un error al intentar registrar el voto.');
+            console.error('Error al registrar el voto:', error);
+        }
+    };
+    /*console.log("Datos enviados:", {
     id_persona: idPersona,
     tipo_usuario,
     id_candidato,
     tipo_voto
  });
+ curl -X POST http://192.168.1.98:8100/registrarVoto -H "Content-Type: application/json" -d '{
+    "id_persona": 12,
+    "tipo_usuario": "alumno",
+    "id_candidato": 3,
+    "tipo_voto": "candidato"
 
-
-    // Enviar la información al backend
-    try {
-        const response = await fetch(`http://192.168.1.98:8100/registrarVoto`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id_persona: idPersona, tipo_usuario, id_candidato, tipo_voto }),
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            alert('Voto registrado correctamente');
-        } else {
-            alert('Error al registrar el voto');
-        }
-    } catch (error) {
-        alert('Ocurrió un error al intentar registrar el voto 2: ');
-        console.error('Error al registrar el voto:', error);
-
-    }
-};
+ */
 
     return (
         <IonPage>
@@ -173,7 +170,7 @@ const Index: React.FC = () => {
                 <h3 className='sin-estilos'>Bienvenido:</h3>
                 {alumnoInfo ? (
                     <p className='sin-estilos estilo-texto'>
-                        Nombre: {alumnoInfo.persona_nombre}, Carrera: {alumnoInfo.carrera_nombre}, Organización: {alumnoInfo.organizacion_nombre}, idPersona:{idPersona}
+                        Nombre: {alumnoInfo.persona_nombre}, Organización: {alumnoInfo.organizacion_nombre}
                     </p>
                 ) : (
                     <p className='sin-estilos estilo-texto'>Cargando información del alumno...</p>

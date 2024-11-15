@@ -7,11 +7,19 @@ app.use(cors());
 app.use(express.json());
 
 // Configurar conexión a MySQL
-const db = mysql.createConnection({
+/*const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
   password: '',
   database: 'Urna'
+});*/
+
+// Configurar conexión a MySQL
+const db = mysql.createConnection({
+  host: 'database-2.ch0ay6w4kcbb.us-east-1.rds.amazonaws.com',
+  user: 'admin',
+  password: 'Hereiva12',
+  database: 'urnaelectroral'
 });
 
 db.connect((err) => {
@@ -26,13 +34,12 @@ db.connect((err) => {
 app.post('/login', async(req, res) => {
   const {password } = req.body;
   const query = `
-  SELECT Persona.nombre, Persona.id_persona, COALESCE(Alumno.no_cuenta, Profesor.no_cuenta, Administrativo.no_cuenta) AS no_cuenta 
+ SELECT Persona.nombre, Persona.id_persona, COALESCE(Alumno.no_cuenta, Profesor.no_cuenta, Administrativo.no_cuenta) AS no_cuenta 
   FROM Persona 
-  LEFT JOIN Alumno ON Alumno.id_persona = Persona.id_persona 
-  LEFT JOIN Profesor ON Profesor.id_persona = Persona.id_persona 
-  LEFT JOIN Administrativo ON Administrativo.id_persona = Persona.id_persona 
-  WHERE COALESCE(Alumno.voto_realizado, Profesor.voto_realizado, Administrativo.voto_realizado) = 0 
-    AND COALESCE(Alumno.no_cuenta, Profesor.no_cuenta, Administrativo.no_cuenta) = ? 
+  LEFT JOIN Alumno ON Alumno.id_persona = Persona.id_persona AND Alumno.voto_realizado = 0
+  LEFT JOIN Profesor ON Profesor.id_persona = Persona.id_persona AND Profesor.voto_realizado = 0
+  LEFT JOIN Administrativo ON Administrativo.id_persona = Persona.id_persona AND Administrativo.voto_realizado = 0
+  WHERE COALESCE(Alumno.no_cuenta, Profesor.no_cuenta, Administrativo.no_cuenta) = ?
   LIMIT 1;
 `;
 

@@ -204,6 +204,9 @@ img {
 	border:2px solid black;
 	box-shadow: none;
 	--border-style: none;
+	font-size: 20px;
+	color: #000;
+	
 }
 
 .contenedor-candidatos{

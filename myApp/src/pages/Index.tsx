@@ -6,7 +6,11 @@ import candidataImage from '../../assets/img/candidata.jpeg';
 import candidataImage2 from '../../assets/img/hombreCandidato.jpeg';
 import candidatoImage from '../../assets/img/candidata2.jpeg';
 import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
-import { useHistory } from 'react-router-dom'; // Importar useHistory
+import { useHistory, useLocation } from 'react-router-dom'; // Importar useHistory
+
+const history = useHistory(); // Hook para redirigir al usuario
+    const location = useLocation();
+    const [timeLeft, setTimeLeft] = useState(180); // 10 segundos para pruebas, cámbialo a 180 si es necesario
 
 const URL = '192.168.122.1';
 
@@ -150,8 +154,26 @@ const Index: React.FC = () => {
     "tipo_voto": "candidato"
 
  */
+    useEffect(() => {
+            // Reinicia el temporizador cada vez que se monta la página o cambia la ubicación
+            setTimeLeft(180);
 
-    return (
+            const interval = setInterval(() => {
+                setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }, [location]); // Escucha cambios en location para reiniciar el temporizador
+
+        useEffect(() => {
+            if (timeLeft === 0) {
+                history.push('/login');
+            }
+        }, [timeLeft, history]);
+
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        return (
         <IonPage>
             <IonHeader class='none-shadow'>
                 <IonToolbar color={'oroVerde1'}>
@@ -167,6 +189,7 @@ const Index: React.FC = () => {
             </IonHeader>
     
             <IonContent className="ion-padding custom-content">
+                <p>Tiempo para ejercer tu voto: {minutes}:{seconds < 10 ? '0 ${seconds}' : seconds}</p>
                 <h3 className='sin-estilos'>Bienvenido:</h3>
                 {alumnoInfo ? (
                     <p className='sin-estilos estilo-texto'>

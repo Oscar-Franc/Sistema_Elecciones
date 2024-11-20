@@ -8,11 +8,7 @@ import candidatoImage from '../../assets/img/candidata2.jpeg';
 import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
 import { useHistory, useLocation } from 'react-router-dom'; // Importar useHistory
 
-const history = useHistory(); // Hook para redirigir al usuario
-    const location = useLocation();
-    const [timeLeft, setTimeLeft] = useState(180); // 10 segundos para pruebas, cámbialo a 180 si es necesario
-
-const URL = '192.168.122.1';
+const URL = '192.168.1.98';
 
 const Index: React.FC = () => {
     const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
@@ -22,7 +18,28 @@ const Index: React.FC = () => {
     const noCuenta = localStorage.getItem('no_cuenta'); // Obtiene el número de cuenta
     const idPersona = Number(localStorage.getItem('id_persona')); // Convertir id_persona a número
     const history = useHistory(); // Hook para redirigir al usuario
+    const location = useLocation();
+    const [timeLeft, setTimeLeft] = useState(180); // 10 segundos para pruebas, cámbialo a 180 si es necesario
 
+    useEffect(() => {
+        // Reinicia el temporizador cada vez que se monta la página o cambia la ubicación
+        setTimeLeft(180);
+
+        const interval = setInterval(() => {
+            setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [location]); // Escucha cambios en `location` para reiniciar el temporizador
+
+    useEffect(() => {
+        if (timeLeft === 0) {
+            history.push('/login');
+        }
+    }, [timeLeft, history]);
+
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
     // Fetch para obtener los datos del alumno
     useEffect(() => {
         const fetchAlumnoData = async () => {
@@ -154,26 +171,8 @@ const Index: React.FC = () => {
     "tipo_voto": "candidato"
 
  */
-    useEffect(() => {
-            // Reinicia el temporizador cada vez que se monta la página o cambia la ubicación
-            setTimeLeft(180);
 
-            const interval = setInterval(() => {
-                setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
-            }, 1000);
-
-            return () => clearInterval(interval);
-        }, [location]); // Escucha cambios en location para reiniciar el temporizador
-
-        useEffect(() => {
-            if (timeLeft === 0) {
-                history.push('/login');
-            }
-        }, [timeLeft, history]);
-
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        return (
+    return (
         <IonPage>
             <IonHeader class='none-shadow'>
                 <IonToolbar color={'oroVerde1'}>
@@ -189,7 +188,7 @@ const Index: React.FC = () => {
             </IonHeader>
     
             <IonContent className="ion-padding custom-content">
-                <p>Tiempo para ejercer tu voto: {minutes}:{seconds < 10 ? '0 ${seconds}' : seconds}</p>
+            <p>Tiempo restante: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</p>
                 <h3 className='sin-estilos'>Bienvenido:</h3>
                 {alumnoInfo ? (
                     <p className='sin-estilos estilo-texto'>

@@ -7,21 +7,21 @@ app.use(cors());
 app.use(express.json());
 
 // Configurar conexión a MySQL
-/*const db = mysql.createConnection({
+const db = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
   password: '',
   database: 'Urna'
-});*/
+});
 
-// Configurar conexión a MySQL
+/*// Configurar conexión a MySQL
 const db = mysql.createConnection({
   host: 'database-2.ch0ay6w4kcbb.us-east-1.rds.amazonaws.com',
   user: 'admin',
   password: 'Hereiva12',
   database: 'urnaelectroral'
 });
-
+*/
 db.connect((err) => {
   if (err) {
     console.error('Error conectando a la base de datos:', err);
@@ -177,5 +177,5 @@ app.post('/registrarVoto', (req, res) => {
 
 // Iniciar el servidor
 app.listen(8100, () => {
-  console.log('Servidor corriendo en el puerto 8080');
+  console.log('Servidor corriendo en el puerto 8100');
 });

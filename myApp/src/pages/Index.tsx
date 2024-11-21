@@ -1,74 +1,82 @@
 import { IonModal, IonImg, IonIcon, IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonInput } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
-import { alertCircleOutline } from 'ionicons/icons'; 
+import { alertCircleOutline } from 'ionicons/icons';
 import '../theme/variables.css';
 import candidataImage from '../../assets/img/candidata.jpeg';
 import candidataImage2 from '../../assets/img/hombreCandidato.jpeg';
 import candidatoImage from '../../assets/img/candidata2.jpeg';
 import UaemexImage from '../../assets/img/Logo_de_la_UAEMex.svg';
-import { useHistory, useLocation } from 'react-router-dom'; // Importar useHistory
+import { useHistory, useLocation } from 'react-router-dom';
 
-const URL = '192.168.1.98';
+const URL = '192.168.0.111'; // Mejora para usar variable de entorno
 
 const Index: React.FC = () => {
     const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
     const [alumnoInfo, setAlumnoInfo] = useState<any>(null); // Datos del alumno
     const [candidatos, setCandidatos] = useState<{ id_plantilla: string; candidato: string }[]>([]);
     const [otroCandidato, setOtroCandidato] = useState(''); // Para el nombre de otro candidato
-    const noCuenta = localStorage.getItem('no_cuenta'); // Obtiene el número de cuenta
-    const idPersona = Number(localStorage.getItem('id_persona')); // Convertir id_persona a número
-    const history = useHistory(); // Hook para redirigir al usuario
+    const noCuenta = localStorage.getItem('no_cuenta');
+    const idPersona = Number(localStorage.getItem('id_persona'));
+    const history = useHistory();
     const location = useLocation();
-    const [timeLeft, setTimeLeft] = useState(180); // 10 segundos para pruebas, cámbialo a 180 si es necesario
+    const [timeLeft, setTimeLeft] = useState(180); // Temporizador en segundos
 
+    // Resetear estados
+    const resetStates = () => {
+        setSelectedCandidates([]);
+        setOtroCandidato('');
+        setAlumnoInfo(null);
+    };
+
+    // Efecto: Resetear estados al regresar a la página principal
     useEffect(() => {
-        // Reinicia el temporizador cada vez que se monta la página o cambia la ubicación
-        setTimeLeft(180);
+        if (location.pathname === '/') {
+            resetStates();
+        }
+    }, [location]);
 
+    // Efecto: Temporizador para redirigir después de cierto tiempo
+    useEffect(() => {
+        setTimeLeft(180);
         const interval = setInterval(() => {
             setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
         }, 1000);
-
         return () => clearInterval(interval);
-    }, [location]); // Escucha cambios en `location` para reiniciar el temporizador
+    }, [location]);
 
     useEffect(() => {
         if (timeLeft === 0) {
+            resetStates();
             history.push('/login');
         }
     }, [timeLeft, history]);
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    // Fetch para obtener los datos del alumno
+
+    // Fetch: Datos del alumno
     useEffect(() => {
         const fetchAlumnoData = async () => {
             try {
                 const response = await fetch(`http://${URL}:8100/alumnoInfo?no_cuenta=${noCuenta}`);
-                
-                if (!response.ok) {
-                    throw new Error('Error al obtener los datos del alumno');
-                }
-                
+                if (!response.ok) throw new Error('Error al obtener los datos del alumno');
                 const data = await response.json();
-                setAlumnoInfo(data.data); // Guardar los datos del alumno
+                setAlumnoInfo(data.data);
             } catch (error) {
-                console.error('Error al obtener los datos:', error);
+                console.error('Error al obtener los datos del alumno:', error);
             }
         };
 
-        if (noCuenta) {
-            fetchAlumnoData();
-        }
+        if (noCuenta) fetchAlumnoData();
     }, [noCuenta]);
 
-    // Fetch para obtener la lista de candidatos desde el servidor
+    // Fetch: Candidatos
     useEffect(() => {
         const fetchCandidatos = async () => {
             try {
                 const response = await fetch(`http://${URL}:8100/candidatos`);
+                if (!response.ok) throw new Error('Error al obtener los candidatos');
                 const data = await response.json();
-                // Filtrar para obtener solo los primeros tres candidatos con nombre no nulo
                 const candidatosFiltrados = data.candidatos
                     .filter((candidato: any) => candidato.candidato !== null)
                     .slice(0, 3);
@@ -80,31 +88,27 @@ const Index: React.FC = () => {
         fetchCandidatos();
     }, []);
 
-    // Maneja la selección de un candidato
+    // Manejar selección de candidatos
     const handleImageClick = (candidateName: string) => {
-        setSelectedCandidates(prevSelected => 
-            prevSelected.includes(candidateName) 
-                ? prevSelected.filter(name => name !== candidateName) // Deselecciona si ya está en la lista
-                : [...prevSelected, candidateName] // Agrega si no está en la lista
+        setSelectedCandidates((prevSelected) =>
+            prevSelected.includes(candidateName)
+                ? prevSelected.filter((name) => name !== candidateName)
+                : [...prevSelected, candidateName]
         );
     };
 
-    // Determinar tipo de usuario según el rango de id_persona
+    // Determinar tipo de usuario según id_persona
     const determinarTipoUsuario = (id_persona: number) => {
-        if (id_persona >= 1 && id_persona <= 5000) {
-            return 'alumno';
-        } else if (id_persona >= 5001 && id_persona <= 7000) {
-            return 'profesor';
-        } else if (id_persona >= 7001 && id_persona <= 8000) {
-            return 'administrativo';
-        }
-        return null; // Fuera de rango
+        if (id_persona >= 1 && id_persona <= 5000) return 'alumno';
+        if (id_persona >= 5001 && id_persona <= 7000) return 'profesor';
+        if (id_persona >= 7001 && id_persona <= 8000) return 'administrativo';
+        return null;
     };
 
-    // Enviar voto
+    // Manejar envío del voto
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!idPersona) {
             alert('ID de persona no encontrado. Por favor, vuelve a iniciar sesión.');
             return;
@@ -119,26 +123,24 @@ const Index: React.FC = () => {
         let tipo_voto;
         let id_candidato = null;
 
-        // Determinar el tipo de voto según las condiciones
         if (selectedCandidates.length === 1 && !otroCandidato) {
             tipo_voto = 'candidato';
-            id_candidato = candidatos.find(c => c.candidato === selectedCandidates[0])?.id_plantilla;
+            id_candidato = candidatos.find((c) => c.candidato === selectedCandidates[0])?.id_plantilla;
             if (!id_candidato) {
                 alert('No se pudo encontrar el candidato seleccionado');
                 return;
             }
         } else if (selectedCandidates.length === 3 && otroCandidato) {
             tipo_voto = 'otro';
-            id_candidato = 4; // asignado a plantilla "Otro"
+            id_candidato = 4;
         } else if (selectedCandidates.length === 0 && otroCandidato) {
             tipo_voto = 'otro';
-            id_candidato = 4; // asignado a plantilla "Otro"
+            id_candidato = 4;
         } else {
             tipo_voto = 'nulo';
-            id_candidato = 5; // asignado a plantilla "Nulo"
+            id_candidato = 5;
         }
 
-        // Enviar la información al backend
         try {
             const response = await fetch(`http://${URL}:8100/registrarVoto`, {
                 method: 'POST',
@@ -149,7 +151,8 @@ const Index: React.FC = () => {
             const data = await response.json();
             if (data.success) {
                 alert('Voto registrado correctamente');
-                history.push('/'); // Redirigir a la página principal después del voto
+                resetStates();
+                history.push('/');
             } else {
                 alert('Error al registrar el voto');
             }
@@ -158,85 +161,71 @@ const Index: React.FC = () => {
             console.error('Error al registrar el voto:', error);
         }
     };
-    /*console.log("Datos enviados:", {
-    id_persona: idPersona,
-    tipo_usuario,
-    id_candidato,
-    tipo_voto
- });
- curl -X POST http://192.168.1.98:8100/registrarVoto -H "Content-Type: application/json" -d '{
-    "id_persona": 12,
-    "tipo_usuario": "alumno",
-    "id_candidato": 3,
-    "tipo_voto": "candidato"
-
- */
 
     return (
         <IonPage>
-            <IonHeader class='none-shadow'>
-                <IonToolbar color={'oroVerde1'}>
-                    <div className='div-estilo2 color-principal'>
-                        <div className='div-logo3'>
-                            <img src={UaemexImage} className='img3' alt="logoUaemex" />
+            <IonHeader class="none-shadow">
+                <IonToolbar color="oroVerde1">
+                    <div className="div-estilo2 color-principal">
+                        <div className="div-logo3">
+                            <img src={UaemexImage} className="img3" alt="logoUaemex" />
                         </div>
-                        <IonTitle color={'oroVerde4'} className="estilo-letras">
+                        <IonTitle color="oroVerde4" className="estilo-letras">
                             Universidad Autónoma del <br /> Estado de México
                         </IonTitle>
                     </div>
                 </IonToolbar>
             </IonHeader>
-    
+
             <IonContent className="ion-padding custom-content">
-            <p>Tiempo restante: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</p>
-                <h3 className='sin-estilos'>Bienvenido:</h3>
+                <p>Tiempo restante: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</p>
+                <h3 className="sin-estilos">Bienvenido:</h3>
                 {alumnoInfo ? (
-                    <p className='sin-estilos estilo-texto'>
+                    <p className="sin-estilos estilo-texto">
                         Nombre: {alumnoInfo.persona_nombre}, Organización: {alumnoInfo.organizacion_nombre}
                     </p>
                 ) : (
-                    <p className='sin-estilos estilo-texto'>Cargando información del alumno...</p>
+                    <p className="sin-estilos estilo-texto">Cargando información del alumno...</p>
                 )}
-                <p className='sin-estilos estilo-texto'>Elige a tu candidato. Esta es una prueba piloto</p>
-                
-                <div className='contenedor-candidatos'>
+                <p className="sin-estilos estilo-texto">Elige a tu candidato. Esta es una prueba piloto</p>
+
+                <div className="contenedor-candidatos">
                     <form onSubmit={handleSubmit}>
-                        {/* Mostrar los primeros tres candidatos con imágenes */}
                         {candidatos.map((candidato, index) => (
-                            <div key={candidato.id_plantilla} className='contenedor-candidato'>
-                                <div className='info-contenedor' onClick={() => handleImageClick(candidato.candidato)}>
-                                    <img 
+                            <div key={candidato.id_plantilla} className="contenedor-candidato">
+                                <div className="info-contenedor" onClick={() => handleImageClick(candidato.candidato)}>
+                                    <img
                                         src={
                                             index === 0 ? candidataImage :
-                                            index === 1 ? candidataImage2 : 
+                                            index === 1 ? candidataImage2 :
                                             candidatoImage
                                         }
-                                        alt="Candidata" 
+                                        alt="Candidata"
                                         className={selectedCandidates.includes(candidato.candidato) ? 'selected' : ''}
                                     />
-                                    {/* Mostrar tachado si el candidato está seleccionado */}
                                     {selectedCandidates.includes(candidato.candidato) && (
-                                        <span className='mark'>X</span>
+                                        <span className="mark">X</span>
                                     )}
-                                    <div className='fondo-info'>
-                                        <p className='sin-estilos'>Nombre: {candidato.candidato}</p>
+                                    <div className="fondo-info">
+                                        <p className="sin-estilos">Nombre: {candidato.candidato}</p>
                                     </div>
                                 </div>
                             </div>
                         ))}
-                        {/* Campo para ingresar otro candidato */}
                         <IonLabel position="floating">Escribe el nombre de algún otro candidato</IonLabel>
                         <IonInput
-                            className='caja-login'
-                            fill='outline'
-                            labelPlacement='floating'
-                            type='text'
-                            placeholder='Luis Hernandez Sanchez'
+                            className="caja-login"
+                            fill="outline"
+                            labelPlacement="floating"
+                            type="text"
+                            placeholder="Luis Hernandez Sanchez"
                             value={otroCandidato}
                             onIonChange={(e) => setOtroCandidato(e.detail.value!)}
                         ></IonInput>
                         <div>
-                            <IonButton fill="clear" color={'verde1'} className=' estilo-letras-login' expand='full' type='submit'>Votar</IonButton>
+                            <IonButton fill="clear" color="verde1" className="estilo-letras-login" expand="full" type="submit">
+                                Votar
+                            </IonButton>
                         </div>
                     </form>
                 </div>
